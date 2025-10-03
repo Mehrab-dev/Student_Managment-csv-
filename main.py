@@ -16,6 +16,9 @@ add.add_argument("national_code",help="student national code")
 add.add_argument("phone",help="student phone")
 add.add_argument("--email",required=False,help="student email")
 
+list_data = sub_parser.add_parser("l",help="list all student in csv file")
+list_data.add_argument("--p",required=True,help="file address for list students",type=str)
+
 
 args = parser.parse_args()
 
@@ -24,3 +27,6 @@ if args.command == "a" :
     data = Student(name=args.name,lastname=args.lastname,gender=args.gender,national_code=args.national_code,phone=args.phone,email=args.email)
     manage = Student_manager(args.p)
     manage.add_student(data)
+if args.command == "l" :
+    manage = Student_manager(path_file=args.p)
+    print(manage.list_student())

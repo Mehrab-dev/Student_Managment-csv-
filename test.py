@@ -33,9 +33,17 @@ def test_add_student(tmp_path,monkeypatch) :
     assert list_data[0]["name"] == "mehrab"
     assert list_data[0]["phone"] == "09154138288"
 
+def test_list_student(tmp_path) :
+    fake_path = tmp_path / "data_student.csv"
 
+    manage = Student_manager(path_file=str(fake_path))
+    student = Student("mehrab","khanmohammadi","male","1234567898","09154138288")
+    manage.add_student(student)
 
-
+    list_data = manage.list_student()
+    assert len(list_data) == 1
+    assert list_data[0]["name"] == "mehrab"
+    assert list_data[0]["phone"] == "09154138288"
 
 
 

@@ -26,3 +26,9 @@ class Student_manager :
             writer = csv.DictWriter(a,fieldnames=dict_data.keys())
             writer.writerow(dict_data)
 
+    def list_student(self) :
+        with open(self.path_file,"r",encoding="utf-8") as s :
+            data = csv.DictReader(s)
+            return list(data)
+
+
