@@ -16,10 +16,13 @@ class Student :
         if not match :
             raise ValueError("invalid phone number")
         self.phone = phone
-        match = re.fullmatch(r"[a-zA-Z0-9_.]+@gmail\.com$",email)
-        if not match :
-            raise ValueError("invalid email")
-        self.email = email if email else ""
+        if email is not None :
+            match = re.fullmatch(r"[a-zA-Z0-9_.]+@gmail\.com$",email)
+            if not match :
+                raise ValueError("invalid email")
+            self.email = email
+        else :
+            self.email = ""
 
     def fullname(self) :
         return f"{self.name} {self.lastname}"
