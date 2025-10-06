@@ -45,5 +45,44 @@ def test_list_student(tmp_path) :
     assert list_data[0]["name"] == "mehrab"
     assert list_data[0]["phone"] == "09154138288"
 
+def test_search_st_ncode(tmp_path) :
+    fake_path = tmp_path / "data_student.csv"
+    manage = Student_manager(path_file=str(fake_path))
+    student = Student("mehrab","khanmohammadi","male","0864563024","09308438266")
+    manage.add_student(student)
+    search = manage.search_student_with_ncode(ncode="0864563024")
+    assert search[0]["name"] == "mehrab"
+    assert search[0]["lastname"] == "khanmohammadi"
+    assert search[0]["national_code"] == "0864563024"
 
+def test_delete_student(tmp_path) :
+    fake_path = tmp_path / "data_student.csv"
+    student = Student("ali","ghorbani","male","0942871502","09127390247")
+    manage = Student_manager(path_file=str(fake_path))
+    manage.add_student(student)
+    manage.delete_student_with_phone(phone="09127390247")
+    with open(fake_path,"r",encoding="utf-8") as d :
+        data = csv.DictReader(d)
+        assert len(list(data)) == 0
 
+def test_average(tmp_path) :
+    fake_path = tmp_path / "data_student.csv"
+    student1 = Student("alex","teles","male","2947638996","09734268819",avg="18")
+    student2 = Student("lana","delray","female","7391830289","09287165542",avg="16.48")
+    manage = Student_manager(path_file=str(fake_path))
+    manage.add_student(student1)
+    manage.add_student(student2)
+    avg = manage.avg_students()
+    assert round(avg,2) == 17.24
+
+def test_highest_average(tmp_path) :
+    fake_path = tmp_path / "data_student.csv"
+    student1 = Student("alex","teles","male","2947638996","09734268819",avg="18")
+    student2 = Student("lana", "delray", "female", "7391830289", "09287165542", avg="16.48")
+    student3 = Student("mikel","baroz","male","7319830289","09447165542",avg="19.03")
+    manage = Student_manager(path_file=str(fake_path))
+    manage.add_student(student1)
+    manage.add_student(student2)
+    manage.add_student(student3)
+    h_gpa = manage.highest_gpa()
+    assert h_gpa == 19.03
