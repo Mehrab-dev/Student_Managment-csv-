@@ -86,3 +86,13 @@ def test_highest_average(tmp_path) :
     manage.add_student(student3)
     h_gpa = manage.highest_gpa()
     assert h_gpa == 19.03
+
+def test_min_gpa(tmp_path) :
+    fake_path = tmp_path / "data_students.csv"
+    student1 = Student("mehrab","khanmohammadi","male","0867384755","09154132425",gpa="17.45")
+    student2 = Student("aide","hasanzadeh","female","0678674040","09308433030",gpa="19.29")
+    manage = Student_manager(path_file=str(fake_path))
+    manage.add_student(student1)
+    manage.add_student(student2)
+    min_gpa = manage.min_gpa()
+    assert min_gpa == 17.45

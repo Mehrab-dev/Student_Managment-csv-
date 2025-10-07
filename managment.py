@@ -9,7 +9,7 @@ class Student_manager :
         self.path_file = path_file
         if not os.path.exists(self.path_file) :
             with open(self.path_file,"w",encoding="utf-8") as w :
-                writer = csv.DictWriter(w,fieldnames=["id","name","lastname","gender","national_code","phone","email","avg"],delimiter=",")
+                writer = csv.DictWriter(w,fieldnames=["id","name","lastname","gender","national_code","phone","email","gpa"],delimiter=",")
                 writer.writeheader()
 
 
@@ -66,14 +66,14 @@ class Student_manager :
             write.writerows(new_data)
         return "Student successfully deleted"
 
-    def avg_students(self) :
+    def gpa_students(self) :
         average = []
         with open(self.path_file,"r",encoding="utf-8") as a :
             reader = list(csv.DictReader(a))
             for i in reader :
-                if i.get("avg") :
+                if i.get("gpa") :
                     try :
-                        average.append(float(i["avg"]))
+                        average.append(float(i["gpa"]))
                     except ValueError :
                         pass
         return sum(average) / len(average) if average else 0
@@ -83,15 +83,63 @@ class Student_manager :
         with open(self.path_file,"r",encoding="utf-8") as h :
             reader = list(csv.DictReader(h))
             for i in reader :
-                if i.get("avg").strip() :
+                if i.get("gpa").strip() :
                     try :
-                        students.append(float(i["avg"]))
+                        students.append(float(i["gpa"]))
                     except ValueError :
                         pass
         if not students :
             return 0
         return max(students)
 
+
+    def update_student(self,phone:str,name:str=None,lastname:str=None,gender:str=None,national_code:str=None,email:str=None,gpa:str=None) :
+        updated = False
+        with open(self.path_file,"r",encoding="utf-8") as u :
+            reader = list(csv.DictReader(u))
+            for i in reader :
+                if i["phone"] == phone :
+                    if name is not None :
+                        i["name"] = name
+                    if lastname is not None :
+                        i["lastname"] = lastname
+                    if gender is not None :
+                        i["gender"] = gender
+                    if national_code is not None :
+                        if re.fullmatch(r"\d{10}",national_code) :
+                            i["national_code"] = national_code
+                        else :
+                            raise ValueError("the new national code is invalid")
+                    if email is not None :
+                        if re.fullmatch(r"[a-zA-Z0-9._]+@gmail\.com$",email) :
+                            i["email"] = email
+                        else :
+                            raise ValueError("the new email is invalid")
+                    if gpa is not None :
+                        i["avg"] = str(float(gpa))
+                    updated = True
+                    break
+        if not updated :
+            return "student not found with this mobile phone"
+        with open(self.path_file,"w",encoding="utf-8",newline="") as a :
+            writer = csv.DictWriter(a,fieldnames=reader[0].keys())
+            writer.writeheader()
+            writer.writerows(reader)
+        return "the desired student is information was updated"
+
+    def min_gpa(self) :
+        all_gpa = []
+        with open(self.path_file,"r",encoding="utf-8") as m :
+            reader = list(csv.DictReader(m))
+            for i in reader :
+                if i.get("gpa") :
+                    try :
+                        all_gpa.append(float(i["gpa"]))
+                    except ValueError :
+                        pass
+        if not all_gpa :
+            return "no grade has been recorded"
+        return min(all_gpa)
 
 
 

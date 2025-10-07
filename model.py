@@ -3,7 +3,7 @@ import re
 
 
 class Student :
-    def __init__(self,name:str,lastname:str,gender:str,national_code:str,phone:str,email:str=None,avg:str=None) :
+    def __init__(self,name:str,lastname:str,gender:str,national_code:str,phone:str,email:str=None,gpa:str=None) :
         self.id = uuid.uuid4()
         self.name = name
         self.lastname = lastname
@@ -23,10 +23,10 @@ class Student :
             self.email = email
         else :
             self.email = ""
-        if avg is not None :
-            self.avg = float(avg)
+        if gpa is not None :
+            self.gpa = float(gpa)
         else :
-            self.avg = ""
+            self.gpa = ""
 
     def fullname(self) :
         return f"{self.name} {self.lastname}"
@@ -40,7 +40,7 @@ class Student :
             "national_code":self.national_code,
             "phone":self.phone,
             "email":self.email,
-            "avg":self.avg
+            "avg":self.gpa
         }
 
 
